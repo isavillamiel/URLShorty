@@ -27,14 +27,15 @@ def table_check():
         );
     """
     # urls.bd better be in app root folder lol
-    with sqlite3.connect('urls.db') as conn:
+    with sqlite3.connect('myurls.db') as conn:
         cursor = conn.cursor()
         try:
             cursor.execute(create_table)
         except OperationalError:
             pass
 
-
+        
+# to encode
 def toBase64(num, b=64):
     if b <= 0 or b > 64:
         return 0
@@ -49,6 +50,7 @@ def toBase64(num, b=64):
     return res
 
 
+# to decode
 def toBase10(num, b=64):
     base = string.digits + string.lowercase + string.uppercase
     limit = len(num)
@@ -66,7 +68,7 @@ def home():
             url = 'http://' + original_url
         else:
             url = original_url
-        with sqlite3.connect('urls.db') as conn:
+        with sqlite3.connect('myurls.db') as conn:
             cursor = conn.cursor()
             res = cursor.execute(
                 'INSERT INTO WEB_URL (URL) VALUES(?)',
@@ -81,7 +83,7 @@ def home():
 def redirect_short_url(short_url):
     decoded = toBase10(short_url)
     url = host
-    with sqlite3.connect('urls.db') as conn:
+    with sqlite3.connect('myurls.db') as conn:
         cursor = conn.cursor()
         res = cursor.execute('SELECT URL FROM WEB_URL WHERE ID=?', [decoded])
         try:
